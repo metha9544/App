@@ -1,278 +1,277 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>คำนวณดอกเบี้ยลดต้นลดดอก</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>คำนวณดอกเบี้ยลดต้นลดดอก</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #e6f2ff;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      margin: 0;
+      padding: 30px 10px;
+    }
+    #calculator {
+      background-color: white;
+      border-radius: 10px;
+      padding: 25px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 450px;
+    }
+    h2 {
+      text-align: center;
+      color: #004080;
+      font-size: 24px;
+    }
+    input, button, label, select {
+      width: 100%;
+      margin: 8px 0;
+      font-size: 16px;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+    input[type="checkbox"] {
+      width: auto;
+      margin-right: 10px;
+    }
+    #tableTitle {
+      font-weight: bold;
+      font-size: 18px;
+      text-align: center;
+      color: #003366;
+      margin-bottom: 10px;
+      display: none;
+    }
+    #calculateBtn {
+      background-color: #28a745;
+      color: white;
+      font-size: 20px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+    #calculateBtn:hover {
+      background-color: #218838;
+    }
+    .checkbox-container {
+      display: flex;
+      justify-content: space-between;
+    }
+    .checkbox-container label {
+      font-size: 14px;
+      margin-right: 10px;
+    }
+    
+    /* CSS สำหรับตารางให้แสดงพอดีหน้าจอ (ไม่เลื่อนแนวนอน) */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      background-color: #f9f9f9;
+      font-size: 10px;
+    }
+    th, td {
+      border: 1px solid #999;
+      padding: 2px;
+      text-align: center;
+      background-color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    th {
+      background-color: #cce5ff;
+      color: #003366;
+    }
+    tr:nth-child(even) {
+      background-color: #f0f8ff;
+    }
+    .totalInterest {
+      text-align: center;
+      font-weight: bold;
+      background-color: #e0f0ff;
+    }
+    #resetBtn {
+      margin-top: 15px;
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      font-size: 14px;
+      padding: 8px;
+      cursor: pointer;
+    }
+    #resetBtn:hover {
+      background-color: #c82333;
+    }
+    h3#titleDisplay {
+      font-size: 22px;
+      font-weight: bold;
+      color: #004080;
+      text-align: center;
+      margin-top: 20px;
+    }
+    /* กำหนดความกว้างของคอลัมน์โดยใช้เปอร์เซ็นต์ */
+    th:nth-child(1), td:nth-child(1) { width: 8%; }   /* คอลัมน์ "งวด" */
+    th:nth-child(2), td:nth-child(2) { width: 12%; }  /* คอลัมน์ "เดือน" */
+    th:nth-child(3), td:nth-child(3) { width: 15%; }  /* คอลัมน์ "เงินที่จ่าย" */
+    th:nth-child(4), td:nth-child(4) { width: 12%; }  /* คอลัมน์ "ดอกเบี้ย" */
+    th:nth-child(5), td:nth-child(5) { width: 12%; }  /* คอลัมน์ "ลดต้น" */
+    th:nth-child(6), td:nth-child(6) { width: 18%; }  /* คอลัมน์ "เงินต้นคงเหลือ" */
+    th:nth-child(7), td:nth-child(7) { width: 15%; }  /* คอลัมน์ "วงเงินใช้ได้" (ถ้ามี) */
 
-	 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>คำนวณดอกเบี้ยลดต้นลดดอก</title>
-    <link rel="manifest" href="/manifest.json">
-   
-    <style>
-        /* โค้ดสไตล์ที่มีอยู่แล้ว */
-    </style>
-</head>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #e6f2ff;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            margin: 0;
-            padding: 30px 10px;
-        }
-
-        #calculator {
-            background-color: white;
-            border-radius: 10px;
-            padding: 25px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-            width: 100%;
-            max-width: 450px;
-        }
-
-        h2 {
-            text-align: center;
-            color: #004080;
-            font-size: 24px;
-        }
-
-        input, button, label {
-            width: 100%;
-            margin: 8px 0;
-            font-size: 16px;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-
-        input[type="checkbox"] {
-            width: auto;
-            margin-right: 10px;
-        }
-
-        #tableTitle {
-            font-weight: bold;
-            font-size: 18px;
-            text-align: center;
-            color: #003366;
-            margin-bottom: 10px;
-        }
-
-        #calculateBtn {
-            background-color: #28a745;
-            color: white;
-            font-size: 20px;
-            font-weight: bold;
-            border: none;
-            cursor: pointer;
-        }
-
-        #calculateBtn:hover {
-            background-color: #218838;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            font-size: 14px;
-            background-color: #f9f9f9;
-        }
-
-        th {
-            background-color: #cce5ff;
-            color: #003366;
-            padding: 10px;
-        }
-
-        th, td {
-            border: 1px solid #999;
-            padding: 8px;
-            text-align: center;
-            background-color: #ffffff;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f0f8ff;
-        }
-
-        .totalInterest {
-            text-align: center;
-            font-weight: bold;
-            background-color: #e0f0ff;
-        }
-
-        #resetBtn {
-            margin-top: 15px;
-            background-color: #dc3545;
-            color: white;
-            border: none;
-            font-size: 14px;
-            padding: 8px;
-            cursor: pointer;
-        }
-
-        #resetBtn:hover {
-            background-color: #c82333;
-        }
-
-        /* เรียงปุ่มในบรรทัดเดียว */
-        .checkbox-container {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .checkbox-container label {
-            font-size: 14px;
-            margin-right: 10px;
-        }
-
-        /* ปรับสีตารางหลังคำนวณ */
-        table.calculated {
-            background-color: #e3f2fd;
-        }
-
-        h3#titleDisplay {
-            font-size: 22px;
-            font-weight: bold;
-            color: #004080;
-            text-align: center;
-            margin-top: 20px;
-        }
-    </style>
+    /* เมื่อมีการติ๊กบัตรกดเงินสด ให้ปรับความกว้างคอลัมน์ "งวด" ให้แคบลง */
+    .cardTable th:nth-child(1),
+    .cardTable td:nth-child(1) {
+      width: 5%;
+    }
+  </style>
 </head>
 <body>
-    <div id="calculator">
-        <h2>คำนวณดอกเบี้ยลดต้นลดดอก</h2>
-        <input type="number" id="principal" placeholder="กรอกจำนวนเงินต้น">
-        <input type="number" id="rate" placeholder="กรอกอัตราดอกเบี้ยต่อปี (%)">
-        <input type="number" id="months" placeholder="กรอกจำนวนงวด (เดือน)">
-        <input type="number" id="fixedMonths" placeholder="จำนวนงวดที่ต้องการจ่ายเท่ากัน">
-        <input type="number" id="fixedPayment" placeholder="จำนวนเงินที่ต้องการจ่าย (บาท)">
-        
-        <!-- ปรับให้ปุ่มติ๊กอยู่ในบรรทัดเดียวกัน -->
-        <div class="checkbox-container">
-            <label><input type="checkbox" id="isCard"> เป็นบัตรกดเงินสด</label>
-            <label><input type="checkbox" id="showTotalInterest"> แสดงดอกเบี้ยทั้งหมด</label>
-            <label><input type="checkbox" id="enableTableTitle" onchange="toggleTitle()"> ใส่ชื่อหัวตาราง</label>
-        </div>
-
-        <!-- ปรับ input ให้พิมพ์ได้ทันที -->
-        <input type="text" id="tableTitle" placeholder="ชื่อหัวตาราง" oninput="updateTitle()" style="display:none;">
-        <button id="calculateBtn" onclick="calculateLoan()">คำนวณ</button>
-
-        <div id="resultContainer" style="margin-top: 20px;">
-            <div id="result"></div>
-        </div>
+  <div id="calculator">
+    <h2>คำนวณดอกเบี้ยลดต้นลดดอก</h2>
+    <input type="number" id="principal" placeholder="กรอกจำนวนเงินต้น">
+    <input type="number" id="rate" placeholder="กรอกอัตราดอกเบี้ยต่อปี (%)">
+    <input type="number" id="months" placeholder="กรอกจำนวนงวด (เดือน)">
+    <input type="number" id="fixedMonths" placeholder="จำนวนงวดที่ต้องการจ่ายเท่ากัน">
+    <input type="number" id="fixedPayment" placeholder="จำนวนเงินที่ต้องการจ่าย (บาท)">
+    
+    <label>เดือนเริ่มต้น</label>
+    <select id="startingMonth">
+      <option value="0">มกราคม</option>
+      <option value="1">กุมภาพันธ์</option>
+      <option value="2">มีนาคม</option>
+      <option value="3">เมษายน</option>
+      <option value="4">พฤษภาคม</option>
+      <option value="5">มิถุนายน</option>
+      <option value="6">กรกฎาคม</option>
+      <option value="7">สิงหาคม</option>
+      <option value="8">กันยายน</option>
+      <option value="9">ตุลาคม</option>
+      <option value="10">พฤศจิกายน</option>
+      <option value="11">ธันวาคม</option>
+    </select>
+    
+    <div class="checkbox-container">
+      <label><input type="checkbox" id="isCard"> เป็นบัตรกดเงินสด</label>
+      <label><input type="checkbox" id="showTotalInterest"> แสดงดอกเบี้ยทั้งหมด</label>
+      <label><input type="checkbox" id="enableTableTitle" onchange="toggleTitle()"> ใส่ชื่อหัวตาราง</label>
     </div>
-
-    <script>
-        function toggleTitle() {
-            const check = document.getElementById("enableTableTitle").checked;
-            const input = document.getElementById("tableTitle");
-            input.style.display = check ? "block" : "none";
-        }
-
-        function updateTitle() {
-            const titleText = document.getElementById("tableTitle").value;
-            const titleElement = document.getElementById("titleDisplay");
-            if (titleElement) {
-                titleElement.innerText = titleText;
-            }
-        }
-
-        function calculateLoan() {
-            let principal = parseFloat(document.getElementById("principal").value);
-            let annualRate = parseFloat(document.getElementById("rate").value);
-            let months = parseInt(document.getElementById("months").value);
-            let fixedMonths = parseInt(document.getElementById("fixedMonths").value);
-            let fixedPayment = parseFloat(document.getElementById("fixedPayment").value);
-            let isCard = document.getElementById("isCard").checked;
-            let showTotalInterest = document.getElementById("showTotalInterest").checked;
-            let enableTableTitle = document.getElementById("enableTableTitle").checked;
-            let tableTitle = document.getElementById("tableTitle").value;
-
-            if (isNaN(principal) || isNaN(annualRate) || isNaN(months) || isNaN(fixedMonths) || isNaN(fixedPayment) ||
-                months <= 0 || principal <= 0 || annualRate <= 0 || fixedMonths < 0 || fixedMonths > months) {
-                document.getElementById("result").innerText = "กรุณากรอกข้อมูลให้ถูกต้อง";
-                return;
-            }
-
-            let monthlyRate = (annualRate / 100) / 12;
-            let remainingPrincipal = principal;
-            let totalInterest = 0;
-
-            let tableHTML = "";
-            if (enableTableTitle) {
-                tableHTML += `<h3 id="titleDisplay">${tableTitle}</h3>`;
-            }
-
-            tableHTML += "<table class='calculated'><tr><th>งวด</th><th>เงินที่จ่าย</th><th>ดอกเบี้ย</th><th>ลดต้น</th><th>เงินต้นคงเหลือ</th>";
-            if (isCard) tableHTML += "<th>วงเงินใช้ได้</th>";
-            tableHTML += "</tr>";
-
-            for (let i = 1; i <= months; i++) {
-                let interest = remainingPrincipal * monthlyRate;
-                totalInterest += interest;
-                let payment = (i <= fixedMonths)
-                    ? fixedPayment
-                    : (remainingPrincipal * (monthlyRate * Math.pow(1 + monthlyRate, months - i + 1)) / (Math.pow(1 + monthlyRate, months - i + 1) - 1));
-
-                let principalPaid = payment - interest;
-                remainingPrincipal -= principalPaid;
-
-                tableHTML += `<tr>
-                    <td>${i}</td>
-                    <td>${payment.toFixed(2)}</td>
-                    <td>${interest.toFixed(2)}</td>
-                    <td>${principalPaid.toFixed(2)}</td>
-                    <td>${Math.max(remainingPrincipal, 0).toFixed(2)}</td>`;
-
-                if (isCard) tableHTML += `<td>${(principal - remainingPrincipal).toFixed(2)}</td>`;
-                tableHTML += "</tr>";
-            }
-
-            if (showTotalInterest) {
-                tableHTML += `<tr><td colspan="${isCard ? 6 : 5}" class="totalInterest">ดอกเบี้ยรวมทั้งหมด: ${totalInterest.toFixed(2)} บาท</td></tr>`;
-            }
-
-            tableHTML += "</table>";
-            tableHTML += `<button id="resetBtn" onclick="resetForm()">รีเซ็ตข้อมูล</button>`;
-
-            document.getElementById("result").innerHTML = tableHTML;
-        }
-
-        function resetForm() {
-            document.getElementById("principal").value = "";
-            document.getElementById("rate").value = "";
-            document.getElementById("months").value = "";
-            document.getElementById("fixedMonths").value = "";
-            document.getElementById("fixedPayment").value = "";
-            document.getElementById("isCard").checked = false;
-            document.getElementById("showTotalInterest").checked = false;
-            document.getElementById("enableTableTitle").checked = false;
-            document.getElementById("tableTitle").value = "";
-            document.getElementById("tableTitle").style.display = "none";
-            document.getElementById("result").innerHTML = "";
-        }
-    </script>
-    <script>
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/service-worker.js')
-                .then((registration) => {
-                    console.log('Service Worker registered with scope:', registration.scope);
-                })
-                .catch((error) => {
-                    console.log('Service Worker registration failed:', error);
-                });
-        });
+    
+    <input type="text" id="tableTitle" placeholder="ชื่อหัวตาราง" oninput="updateTitle()">
+    <button id="calculateBtn" onclick="calculateLoan()">คำนวณ</button>
+    
+    <div id="resultContainer" style="margin-top: 20px;">
+      <div id="result"></div>
+    </div>
+  </div>
+  
+  <script>
+    function toggleTitle() {
+      const check = document.getElementById("enableTableTitle").checked;
+      const input = document.getElementById("tableTitle");
+      input.style.display = check ? "block" : "none";
     }
-    </script>
+  
+    function updateTitle() {
+      const titleText = document.getElementById("tableTitle").value;
+      const titleElement = document.getElementById("titleDisplay");
+      if (titleElement) {
+        titleElement.innerText = titleText;
+      }
+    }
+  
+    function calculateLoan() {
+      let principal = parseFloat(document.getElementById("principal").value);
+      let annualRate = parseFloat(document.getElementById("rate").value);
+      let months = parseInt(document.getElementById("months").value);
+      let fixedMonths = parseInt(document.getElementById("fixedMonths").value);
+      let fixedPayment = parseFloat(document.getElementById("fixedPayment").value);
+      let isCard = document.getElementById("isCard").checked;
+      let showTotalInterest = document.getElementById("showTotalInterest").checked;
+      let enableTableTitle = document.getElementById("enableTableTitle").checked;
+      let tableTitle = document.getElementById("tableTitle").value;
+      let startingMonth = parseInt(document.getElementById("startingMonth").value);
+  
+      if (isNaN(principal) || isNaN(annualRate) || isNaN(months) || isNaN(fixedMonths) || isNaN(fixedPayment) ||
+          months <= 0 || principal <= 0 || annualRate <= 0 || fixedMonths < 0 || fixedMonths > months) {
+        document.getElementById("result").innerText = "กรุณากรอกข้อมูลให้ถูกต้อง";
+        return;
+      }
+  
+      let monthlyRate = (annualRate / 100) / 12;
+      let remainingPrincipal = principal;
+      let totalInterest = 0;
+  
+      let tableHTML = "";
+      if (enableTableTitle) {
+        tableHTML += `<h3 id="titleDisplay">${tableTitle}</h3>`;
+      }
+  
+      let tableClass = isCard ? 'cardTable' : '';
+      tableHTML += `<table class="${tableClass}"><tr><th>งวด</th><th>เดือน</th><th>เงินที่จ่าย</th><th>ดอกเบี้ย</th><th>ลดต้น</th><th>เงินต้นคงเหลือ</th>`;
+      if (isCard) tableHTML += "<th>วงเงินใช้ได้</th>";
+      tableHTML += "</tr>";
+  
+      for (let i = 1; i <= months; i++) {
+        let interest = remainingPrincipal * monthlyRate;
+        totalInterest += interest;
+        let payment = (i <= fixedMonths)
+          ? fixedPayment
+          : (remainingPrincipal * (monthlyRate * Math.pow(1 + monthlyRate, months - i + 1)) /
+              (Math.pow(1 + monthlyRate, months - i + 1) - 1));
+  
+        let principalPaid = payment - interest;
+        remainingPrincipal -= principalPaid;
+  
+        let monthName = new Date(2022, startingMonth + i - 1, 1)
+          .toLocaleString('th-TH', { month: 'long' });
+  
+        tableHTML += `<tr>
+          <td>${i}</td>
+          <td>${monthName}</td>
+          <td>${payment.toFixed(2)}</td>
+          <td>${interest.toFixed(2)}</td>
+          <td>${principalPaid.toFixed(2)}</td>
+          <td>${Math.max(remainingPrincipal, 0).toFixed(2)}</td>`;
+  
+        if (isCard) {
+          tableHTML += `<td>${(principal - remainingPrincipal).toFixed(2)}</td>`;
+        }
+  
+        tableHTML += "</tr>";
+      }
+  
+      if (showTotalInterest) {
+        let colSpanValue = isCard ? 7 : 6;
+        tableHTML += `<tr><td colspan="${colSpanValue}" class="totalInterest">
+                        ดอกเบี้ยรวมทั้งหมด: ${totalInterest.toFixed(2)} บาท
+                      </td></tr>`;
+      }
+  
+      tableHTML += "</table>";
+      tableHTML += `<button id="resetBtn" onclick="resetForm()">รีเซ็ตข้อมูล</button>`;
+  
+      document.getElementById("result").innerHTML = tableHTML;
+    }
+  
+    function resetForm() {
+      document.getElementById("principal").value = "";
+      document.getElementById("rate").value = "";
+      document.getElementById("months").value = "";
+      document.getElementById("fixedMonths").value = "";
+      document.getElementById("fixedPayment").value = "";
+      document.getElementById("isCard").checked = false;
+      document.getElementById("showTotalInterest").checked = false;
+      document.getElementById("enableTableTitle").checked = false;
+      document.getElementById("tableTitle").value = "";
+      document.getElementById("tableTitle").style.display = "none";
+      document.getElementById("result").innerHTML = "";
+    }
+  </script>
 </body>
 </html>
